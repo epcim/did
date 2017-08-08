@@ -114,7 +114,7 @@ class Issue(object):
         for comment in self.comments:
             created = dateutil.parser.parse(comment["created"]).date()
             try:
-                if (comment["author"]["name"] == user.login and
+                if (comment["author"]["emailAddress"] == user.login and
                         created >= options.since.date and
                         created < options.until.date):
                     return True
