@@ -65,9 +65,11 @@ class Gerrit(object):
     def get_query_result(self, url):
         log.debug('url = {0}'.format(url))
         res = self.opener.open(url)
-        if res.getcode() != 200:
+        if res.getcode() != 200 and res.getcode() != 400:
             raise IOError(
                 'Cannot retrieve list of changes ({0})'.format(res.getcode()))
+        if res.getcode() == 400:
+          return {}
 
         # see https://code.google.com/p/gerrit/issues/detail?id=2006
         # for explanation of skipping first four characters
@@ -375,6 +377,9 @@ class GerritStats(StatsGroup):
                 'No gerrit URL set in the [{0}] section'.format(option))
         self.repo_url = self.config['url']
         log.debug('repo_url = {0}'.format(self.repo_url))
+
+        if 'owner' in self.config:
+            self.user.login = self.config['owner']
 
         if "prefix" not in self.config:
             raise ReportError(
