@@ -10,7 +10,10 @@ import sys
 import codecs
 import datetime
 import optparse
-import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 import xmlrpclib
 import ConfigParser
 from dateutil.relativedelta import MO as MONDAY
